@@ -2,6 +2,8 @@ package com.revature.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -13,18 +15,21 @@ public class Reimbursement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reimbursementId;
 
-    @Column
+    @Column(nullable = false)
+    @Size(max = 255, message = "Description cannot be longer than 255 characters")
     private String description;
 
     @Column(nullable = false)
     @Min(value = 0, message = "Amount must be greater than 0")
     private Double amount;
 
-    @Column(nullable = false, columnDefinition = "text default 'pending'")
+    @Column(nullable = false, columnDefinition = "text DEFAULT 'pending'")
+    @NotNull(message = "Status cannot be null")
+    @Size(max = 50, message = "Status cannot be longer than 50 characters")
     private String status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     public Reimbursement() {
@@ -38,11 +43,11 @@ public class Reimbursement {
         this.user = user;
     }
 
-    public int getId() {
+    public int getReimbursementIdId() {
         return reimbursementId;
     }
 
-    public void setId(int reimbursementId) {
+    public void setReimbursementIdId(int reimbursementId) {
         this.reimbursementId = reimbursementId;
     }
 
@@ -74,7 +79,7 @@ public class Reimbursement {
         return user;
     }
 
-    public void setUserId(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
